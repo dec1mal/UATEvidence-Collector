@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="UAT Evidence Collector">
+  <rect width="64" height="64" rx="12" fill="#102a43"/>
+  <path d="M14 19h36v26H14z" fill="#ffffff" opacity=".96"/>
+  <path d="M18 24h28v4H18zm0 8h18v4H18zm0 8h12v3H18z" fill="#0f5f7a"/>
+  <circle cx="45" cy="43" r="9" fill="#157347"/>
+  <path d="m41 43 3 3 6-7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

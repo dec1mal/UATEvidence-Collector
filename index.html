@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAT Evidence Collector</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="UAT Evidence Collector logo" class="brand-logo">
+        <div>
+          <h1>UAT Evidence Collector</h1>
+          <p>Banking test execution evidence package builder</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-button" type="button" title="Toggle theme" aria-label="Toggle theme">T</button>
+        <button id="resetApp" class="secondary-button danger" type="button">Reset Demo</button>
+      </div>
+    </header>
+
+    <section class="demo-banner">
+      <strong>Browser Demo</strong>
+      <span>In production the Power Automate Desktop flow saves the same package into:</span>
+      <code>Documents\UAT_EXECUTIONS</code>
+    </section>
+
+    <main class="layout">
+      <aside class="side-panel">
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Execution Setup</h2>
+          </div>
+          <form id="setupForm" class="setup-form">
+            <label>
+              <span>Tester Name</span>
+              <input id="testerName" name="testerName" type="text" autocomplete="name" value="Priya Menon">
+            </label>
+            <label>
+              <span>Project Name</span>
+              <input id="projectName" name="projectName" type="text" value="Retail Core Banking Modernization">
+            </label>
+            <label>
+              <span>Application Name</span>
+              <input id="applicationName" name="applicationName" type="text" value="OmniBank Teller Portal">
+            </label>
+            <label>
+              <span>Build Number</span>
+              <input id="buildNumber" name="buildNumber" type="text" value="2026.06.17.1">
+            </label>
+            <label>
+              <span>Release Number</span>
+              <input id="releaseNumber" name="releaseNumber" type="text" value="R26.06">
+            </label>
+            <fieldset>
+              <legend>Environment</legend>
+              <label class="radio-row"><input type="radio" name="environment" value="SIT"> SIT</label>
+              <label class="radio-row"><input type="radio" name="environment" value="UAT" checked> UAT</label>
+              <label class="radio-row"><input type="radio" name="environment" value="PreProd"> PreProd</label>
+              <label class="radio-row"><input type="radio" name="environment" value="Production Validation"> Production Validation</label>
+            </fieldset>
+            <div class="button-row">
+              <button id="importSample" class="secondary-button" type="button">Import Sample Test Cases</button>
+              <button id="startExecution" class="primary-button" type="submit" disabled>Start Execution</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Recent Runs</h2>
+            <button id="clearRecentRuns" class="link-button" type="button">Clear</button>
+          </div>
+          <div id="recentRuns" class="recent-runs empty">No recent runs yet.</div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="dashboard-grid">
+          <article class="metric-card">
+            <span>Total</span>
+            <strong id="metricTotal">0</strong>
+          </article>
+          <article class="metric-card passed">
+            <span>Passed</span>
+            <strong id="metricPassed">0</strong>
+          </article>
+          <article class="metric-card failed">
+            <span>Failed</span>
+            <strong id="metricFailed">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Completed</span>
+            <strong id="metricCompleted">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Remaining</span>
+            <strong id="metricRemaining">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Screenshots</span>
+            <strong id="metricScreenshots">0</strong>
+          </article>
+        </section>
+
+        <section class="panel run-panel">
+          <div class="panel-title">
+            <h2>Execution Dashboard</h2>
+            <span id="runBadge" class="status-pill neutral">No Active Run</span>
+          </div>
+          <div class="run-grid">
+            <div><span>Run ID</span><strong id="runId">-</strong></div>
+            <div><span>Start Time</span><strong id="runStart">-</strong></div>
+            <div><span>Current Test Case</span><strong id="currentTc">-</strong></div>
+            <div><span>Current Status</span><strong id="currentStatus">-</strong></div>
+            <div><span>Screenshots This TC</span><strong id="currentScreenshots">0</strong></div>
+          </div>
+          <div class="progress-shell" aria-label="Execution progress">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title table-title">
+            <h2>Imported Test Cases</h2>
+            <div class="table-tools">
+              <input id="searchCases" type="search" placeholder="Search test cases">
+              <select id="statusFilter" aria-label="Filter by status">
+                <option value="All">All statuses</option>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Passed">Passed</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>TC ID</th>
+                  <th>TC Name</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Screenshot Count</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody id="testCaseTable">
+                <tr><td colspan="8" class="empty-table">Import sample test cases to begin.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="details-grid">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Evidence Gallery</h2>
+              <span id="galleryContext" class="muted">No test case selected</span>
+            </div>
+            <div id="evidenceGallery" class="gallery empty">Screenshots appear here immediately after capture.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Evidence Statistics</h2>
+            </div>
+            <div id="evidenceStats" class="stats-list"></div>
+          </section>
+        </section>
+
+        <section id="summaryPanel" class="panel hidden">
+          <div class="panel-title">
+            <h2>Execution Summary</h2>
+            <div class="button-row compact">
+              <button id="downloadSummaryHtml" class="secondary-button" type="button">Download HTML</button>
+              <button id="downloadSummaryJson" class="secondary-button" type="button">Download JSON</button>
+              <button id="downloadPackage" class="primary-button" type="button">Download Evidence ZIP</button>
+            </div>
+          </div>
+          <div id="summaryContent" class="summary-content"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Audit Log</h2>
+            <div class="button-row compact">
+              <button id="exportLogs" class="secondary-button" type="button">Export Logs</button>
+              <button id="clearLogs" class="secondary-button" type="button">Clear View</button>
+            </div>
+          </div>
+          <pre id="auditLog" class="audit-log"></pre>
+        </section>
+      </section>
+    </main>
+
+    <aside id="captureWidget" class="capture-widget">
+      <div>
+        <span>Current Test Case</span>
+        <strong id="widgetCurrentTc">None</strong>
+      </div>
+      <button id="captureEvidence" class="primary-button" type="button">Capture Evidence <kbd>Alt+S</kbd></button>
+      <button id="markPass" class="success-button" type="button">Mark PASS <kbd>Alt+P</kbd></button>
+      <button id="markFail" class="danger-button" type="button">Mark FAIL <kbd>Alt+F</kbd></button>
+      <button id="nextTc" class="secondary-button" type="button">Next TC <kbd>Alt+N</kbd></button>
+      <button id="endRun" class="secondary-button" type="button">End Run <kbd>Alt+E</kbd></button>
+    </aside>
+
+    <div id="modalBackdrop" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 id="modalTitle">Screenshot Preview</h2>
+          <button id="closeModal" class="icon-button" type="button" aria-label="Close preview">X</button>
+        </div>
+        <img id="modalImage" alt="Screenshot preview">
+        <p id="modalMeta"></p>
+      </div>
+    </div>
+
+    <div id="confirmDialog" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+      <div class="confirm-box">
+        <h2 id="confirmTitle">Confirm</h2>
+        <p id="confirmMessage"></p>
+        <div class="button-row">
+          <button id="confirmCancel" class="secondary-button" type="button">Cancel</button>
+          <button id="confirmOk" class="primary-button" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toastHost" class="toast-host" aria-live="polite"></div>
+  </div>
+
+  <script src="js/crc32.js"></script>
+  <script src="js/utilities.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/logger.js"></script>
+  <script src="js/zip.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/screenshots.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/execution.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

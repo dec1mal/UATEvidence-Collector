@@ -1,0 +1,27 @@
+[
+  {
+    "id": "TC01",
+    "name": "Login Validation",
+    "priority": "High"
+  },
+  {
+    "id": "TC02",
+    "name": "Create Customer",
+    "priority": "High"
+  },
+  {
+    "id": "TC03",
+    "name": "Fund Transfer",
+    "priority": "Critical"
+  },
+  {
+    "id": "TC04",
+    "name": "Account Statement",
+    "priority": "Medium"
+  },
+  {
+    "id": "TC05",
+    "name": "Logout",
+    "priority": "Low"
+  }
+]
